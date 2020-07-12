@@ -39,7 +39,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
         rb[last] = x;
         last = (last + 1) % rb.length;
-        fillCount ++;
+        fillCount++;
 
         return;
     }
@@ -56,7 +56,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         T item = rb[first];
         rb[first] = null;
         first = (first + 1) % rb.length;
-        fillCount --;
+        fillCount--;
 
         return item;
     }
@@ -92,23 +92,71 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     // TODO: When you get to part 4, implement the needed code to support
     //       iteration and equals.
 
-    public static void main(String args[]) {
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        private int idx;
+        private int count;
+
+        public ArrayRingBufferIterator() {
+            idx = first;
+            count = 0;   // number of items that are already visited.
+        }
+
+        public boolean hasNext() {
+            return (count < fillCount);
+        }
+
+        public T next() {
+            T item = rb[idx];
+            idx = (idx + 1) % rb.length;
+            count++;
+            return item;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+
+        ArrayRingBuffer<T> other = (ArrayRingBuffer) o;
+        if (this.capacity() != other.capacity() || this.fillCount() != other.fillCount()) {
+            return false;
+        }
+
+        if (this.peek().getClass() != other.peek().getClass()) {
+            return false;
+        }
+
+        boolean equal = true;
+        /* Loops over each item to check equality. */
+        for (int i = 0; i < this.capacity(); i++) {
+            T thisItem = this.dequeue();
+            T otherItem = other.dequeue();
+            if (!thisItem.equals(otherItem)) {
+                equal = false;
+            }
+            this.enqueue(thisItem);
+            other.enqueue(otherItem);
+        }
+
+        return equal;
+    }
+
+    public static void main(String[] args) {
         ArrayRingBuffer<String> a = new ArrayRingBuffer<>(3);
 
         a.enqueue("I");
         a.enqueue("am");
         a.enqueue("Boru");
-        System.out.println(a.dequeue());
-        //a.enqueue("aaa");
-        System.out.println(a.capacity());
-        System.out.println(a.fillCount());
-        System.out.println(a.dequeue());
-        System.out.println(a.isEmpty());
-        a.enqueue("s1");
-        a.enqueue("s2");
-        System.out.println(a.dequeue());
-        System.out.println(a.dequeue());
-        System.out.println(a.dequeue());
-        System.out.println(a.isEmpty());
+        for (String ai : a) {
+            System.out.println(ai);
+        }
+
     }
 }
