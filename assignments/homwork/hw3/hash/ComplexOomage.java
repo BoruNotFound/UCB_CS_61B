@@ -16,6 +16,13 @@ public class ComplexOomage implements Oomage {
             total = total * 256;
             total = total + x;
         }
+
+        // below is the modification to the hashCode
+        // the deadly list is making significant bits overflow, thus only the last three bits matter
+        // to make the hashCode better, first (n-3) bits should matter (should not overflow)
+        for (int x : params) {
+            total += x;
+        }
         return total;
     }
 
