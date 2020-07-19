@@ -1,8 +1,7 @@
-package hw3.hash;
+package hash;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import hw3.hash.*;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -24,7 +23,7 @@ public class TestSimpleOomage {
     @Test
     public void testHashCodePerfect() {
         // it's not a perfect hashCode due to too much collision by simply using r + b + g
-        SimpleOomage ooA = new SimpleOomage()
+        SimpleOomage ooA = new SimpleOomage(5, 10, 20);
     }
 
     @Test
