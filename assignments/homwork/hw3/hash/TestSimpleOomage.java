@@ -22,8 +22,16 @@ public class TestSimpleOomage {
 
     @Test
     public void testHashCodePerfect() {
-        // it's not a perfect hashCode due to too much collision by simply using r + b + g
+        // set USE_PERFECT_HASH == true
+        // only ooA and ooA2 have exact same rgb values
         SimpleOomage ooA = new SimpleOomage(5, 10, 20);
+        SimpleOomage ooB = new SimpleOomage(10, 5, 20);
+        SimpleOomage ooC = new SimpleOomage(20, 5, 10);
+        SimpleOomage ooA2 = new SimpleOomage(5, 10, 20);
+
+        assertNotEquals(ooA.hashCode(), ooB.hashCode());
+        assertNotEquals(ooA.hashCode(), ooC.hashCode());
+        assertEquals(ooA.hashCode(), ooA2.hashCode());
     }
 
     @Test
@@ -56,8 +64,7 @@ public class TestSimpleOomage {
         assertFalse(hashSet.contains(ooA2));
     }
 
-    /* TODO: Uncomment this test after you finish haveNiceHashCodeSpread in OomageTestUtility */
-    /*@Test
+    @Test
     public void testRandomOomagesHashCodeSpread() {
         List<Oomage> oomages = new ArrayList<>();
         int N = 10000;
@@ -67,7 +74,7 @@ public class TestSimpleOomage {
         }
 
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(oomages, 10));
-    }*/
+    }
 
     /** Calls tests for SimpleOomage. */
     public static void main(String[] args) {
